@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Caixa - Drogaria</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <h1>Sistema de Caixa</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <h2>Total vendido: R$ {{ total_vendido }}</h2>
+
+    <h2>Produtos disponíveis</h2>
+    {% for produto in produtos %}
+    <div class="produto">
+        <p>
+            <strong>{{ produto[1] }}</strong> - R$ {{ produto[2] }} 
+            (<span class="{% if produto[3] <= 5 %}estoque-baixo{% else %}estoque-ok{% endif %}">
+                Estoque: {{ produto[3] }}
+            </span>)
+        </p>
+        <form action="{{ url_for('registrar_venda') }}" method="post">
+            <input type="hidden" name="produto_id" value="{{ produto[0] }}">
+            <input type="number" name="quantidade" min="1" max="{{ produto[3] }}" placeholder="Qtd" required>
+            <button type="submit">Vender</button>
+        </form>
+    </div>
+    {% endfor %}
+
+    <a href="/cadastro_produto">Voltar ao Cadastro de Produtos</a>
+</body>
+</html>
