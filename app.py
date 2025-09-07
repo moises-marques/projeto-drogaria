@@ -80,25 +80,19 @@ def editar_produto(id):
     conn.close()
     return render_template('editar_produto.html', produto=produto)
 
-# ------------------- DELETAR PRODUTO -------------------
-@app.route('/deletar_produto/<int:id>')
-def deletar_produto(id):
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM produtos WHERE id=?", (id,))
-    conn.commit()
-    conn.close()
-    flash("Produto deletado com sucesso!")
-    return redirect(url_for('cadastro_produto'))
-
 # ------------------- CAIXA / REGISTRO DE VENDAS -------------------
 @app.route('/caixa')
 def caixa():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     
-    # Buscar todos os produtos
-    cursor.execute("SELECT * FROM produtos")
+    # Adicionamos a lógica de busca aqui
+    busca = request.args.get('busca')
+    if busca:
+        cursor.execute("SELECT * FROM produtos WHERE nome LIKE ?", ('%' + busca + '%',))
+    else:
+        cursor.execute("SELECT * FROM produtos")
+        
     produtos = cursor.fetchall()
     
     # Calcular total vendido
@@ -108,15 +102,7 @@ def caixa():
         total_vendido = 0
     
     conn.close()
-    return render_template('caixa.html', produtos=produtos, total_vendido=total_vendido)
-
-@app.route('/registrar_venda', methods=['POST'])
-def registrar_venda():
-    produto_id = int(request.form['produto_id'])
-    quantidade_vendida = int(request.form['quantidade'])
-
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
+    return render_template('caixa.html', produtos=produtos, total_vendido=total_vendido, busca=busca)
 
     cursor.execute("SELECT preco, quantidade FROM produtos WHERE id = ?", (produto_id,))
     produto = cursor.fetchone()
@@ -149,5 +135,49 @@ def registrar_venda():
     return redirect(url_for('caixa'))
 
 # ------------------- INICIAR O SISTEMA -------------------
+
+# ------------------- REGISTRAR VENDA -------------------
+@app.route('/registrar_venda', methods=['POST'])
+def registrar_venda():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    produto_id = request.form['produto_id']
+    quantidade_vendida = int(request.form['quantidade'])
+    
+    # Busca o produto no banco de dados
+    cursor.execute("SELECT * FROM produtos WHERE id = ?", (produto_id,))
+    produto = cursor.fetchone()
+
+    if not produto:
+        flash("Produto não encontrado!")
+        return redirect(url_for('caixa'))
+
+    preco_unitario = produto[2]
+    estoque_atual = produto[3]
+    
+    # Verifica se a quantidade em estoque é suficiente
+    if quantidade_vendida > estoque_atual:
+        flash("Erro: Estoque insuficiente!")
+        conn.close()
+        return redirect(url_for('caixa'))
+        
+    # Calcula o total da venda e atualiza o estoque
+    total_venda = preco_unitario * quantidade_vendida
+    novo_estoque = estoque_atual - quantidade_vendida
+    
+    # Registra a venda na tabela de vendas
+    cursor.execute("INSERT INTO vendas (produto_id, quantidade, total) VALUES (?, ?, ?)", 
+               (produto_id, quantidade_vendida, total_venda))
+    
+    # Atualiza o estoque do produto
+    cursor.execute("UPDATE produtos SET quantidade = ? WHERE id = ?", (novo_estoque, produto_id))
+    
+    conn.commit()
+    conn.close()
+
+    flash(f'Venda registrada com sucesso! Total: R$ {total_venda:.2f}')
+    return redirect(url_for('caixa'))
+
 if __name__ == '__main__':
     app.run(debug=True)

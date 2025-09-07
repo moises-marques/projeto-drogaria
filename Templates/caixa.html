@@ -6,37 +6,50 @@
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h1>Sistema de Caixa</h1>
+    <div class="container">
+        <h1>Sistema de Caixa</h1>
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul>
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash-messages">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
-    <h2>Total vendido: R$ {{ total_vendido }}</h2>
+        <div class="card">
+            <h2>Total vendido: R$ {{ total_vendido }}</h2>
+        </div>
 
-    <h2>Produtos disponíveis</h2>
-    {% for produto in produtos %}
-    <div class="produto">
-        <p>
-            <strong>{{ produto[1] }}</strong> - R$ {{ produto[2] }} 
-            (<span class="{% if produto[3] <= 5 %}estoque-baixo{% else %}estoque-ok{% endif %}">
-                Estoque: {{ produto[3] }}
-            </span>)
-        </p>
-        <form action="{{ url_for('registrar_venda') }}" method="post">
-            <input type="hidden" name="produto_id" value="{{ produto[0] }}">
-            <input type="number" name="quantidade" min="1" max="{{ produto[3] }}" placeholder="Qtd" required>
-            <button type="submit">Vender</button>
-        </form>
+        <div class="card">
+            <form action="{{ url_for('caixa') }}" method="get">
+                <input type="text" name="busca" placeholder="Buscar produto..." value="{{ busca or '' }}">
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Produtos disponíveis</h2>
+            {% for produto in produtos %}
+            <div class="produto">
+                <p>
+                    <strong>{{ produto[1] }}</strong> - R$ {{ produto[2] }} 
+                    (<span class="{% if produto[3] <= 5 %}estoque-baixo{% else %}estoque-ok{% endif %}">
+                        Estoque: {{ produto[3] }}
+                    </span>)
+                </p>
+                <form action="{{ url_for('registrar_venda') }}" method="post">
+                    <input type="hidden" name="produto_id" value="{{ produto[0] }}">
+                    <input type="number" name="quantidade" min="1" max="{{ produto[3] }}" placeholder="Qtd" required>
+                    <button type="submit">Vender</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <a href="/cadastro_produto" class="link-voltar">Voltar ao Cadastro de Produtos</a>
     </div>
-    {% endfor %}
-
-    <a href="/cadastro_produto">Voltar ao Cadastro de Produtos</a>
 </body>
 </html>

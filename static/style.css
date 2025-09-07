@@ -1,24 +1,48 @@
-/* --- Estilo geral da página --- */
+/* --- Cores e Tipografia --- */
+:root {
+    --primary-color: #007bff; /* Azul para botões e cabeçalhos */
+    --secondary-color: #6c757d; /* Cinza para textos secundários */
+    --background-color: #f8f9fa; /* Fundo claro da página */
+    --card-background: #ffffff; /* Fundo de formulários e caixas */
+    --border-color: #dee2e6; /* Cor da borda para tabelas e inputs */
+    --success-color: #28a745; /* Verde para mensagens de sucesso */
+    --danger-color: #dc3545; /* Vermelho para mensagens de erro/perigo */
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
+    background-color: var(--background-color);
     margin: 0;
     padding: 20px;
+    color: #343a40;
 }
 
 h1, h2 {
     text-align: center;
-    color: #333;
+    color: var(--primary-color);
+    margin-bottom: 25px;
 }
 
-/* --- Formulários --- */
-form {
-    background-color: #fff;
+/* --- Layout Geral e Componentes --- */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 10px;
-    max-width: 450px;
-    margin: 0 auto 20px auto;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card {
+    background-color: var(--card-background);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+}
+
+/* --- Formulários e Inputs --- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 input[type="text"],
@@ -26,20 +50,19 @@ input[type="number"],
 input[type="password"],
 input[type="date"] {
     width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
+    padding: 12px;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 16px;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura */
 }
 
 button {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: #fff;
     border: none;
-    padding: 12px;
+    padding: 12px 20px;
     border-radius: 6px;
-    width: 100%;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -52,78 +75,89 @@ button:hover {
 
 /* --- Tabelas --- */
 table {
-    width: 90%;
-    margin: 20px auto;
+    width: 100%;
     border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 10px;
+    background-color: var(--card-background);
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 th, td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
 }
 
 th {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: normal;
 }
 
 tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #f2f2f2;
 }
 
-/* --- Caixa / Produtos --- */
-.produto {
-    background-color: #fff;
-    padding: 15px;
-    margin: 15px auto;
-    max-width: 400px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.produto p {
-    margin: 0;
+/* --- Links e Ações --- */
+.actions a {
+    color: var(--primary-color);
+    text-decoration: none;
     font-weight: bold;
+    margin-right: 15px;
 }
 
-/* --- Indicador de estoque --- */
-.estoque-baixo {
-    color: #dc3545; /* vermelho */
-}
-.estoque-ok {
-    color: #28a745; /* verde */
+.actions a:hover {
+    text-decoration: underline;
 }
 
-/* --- Links --- */
-a {
+.link-voltar {
     display: block;
     text-align: center;
-    margin-top: 20px;
-    color: #007bff;
+    margin-top: 30px;
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: bold;
 }
 
-a:hover {
-    text-decoration: underline;
+/* --- Mensagens Flash (Alerta) --- */
+ul.flash-messages {
+    list-style: none;
+    padding: 15px;
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #fff3cd; /* Amarelo claro para avisos */
+    border: 1px solid #ffeeba;
+    border-radius: 6px;
+    color: #856404;
+    font-weight: bold;
+    text-align: center;
 }
 
-/* --- Flash messages --- */
-ul {
-    list-style: none;
-    padding: 10px;
-    max-width: 450px;
-    margin: 10px auto;
-    background-color: #ffc107;
-    border-radius: 6px;
-    color: #212529;
+/* --- Layout da Página de Caixa --- */
+.produto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--card-background);
+    margin-bottom: 10px;
+}
+
+.produto strong {
+    color: #495057;
+}
+
+.produto span {
+    font-size: 0.9em;
     font-weight: bold;
+}
+
+.estoque-baixo {
+    color: var(--danger-color);
+}
+
+.estoque-ok {
+    color: var(--success-color);
 }
