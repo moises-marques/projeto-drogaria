@@ -9,7 +9,7 @@ setup(
         "build_exe": {
             "packages": ["flask", "sqlite3"],
             "include_files": [
-                "Templates/",  # Inclua o diretório dos templates
+                "templates/",  # Inclua o diretório dos templates
                 "static/",     # Inclua o diretório dos arquivos estáticos
                 "database.db", # Inclua o banco de dados, se desejar distribuir já preenchido
             ],
