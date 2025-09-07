@@ -1,0 +1,163 @@
+/* --- Cores e Tipografia --- */
+:root {
+    --primary-color: #007bff; /* Azul para botões e cabeçalhos */
+    --secondary-color: #6c757d; /* Cinza para textos secundários */
+    --background-color: #f8f9fa; /* Fundo claro da página */
+    --card-background: #ffffff; /* Fundo de formulários e caixas */
+    --border-color: #dee2e6; /* Cor da borda para tabelas e inputs */
+    --success-color: #28a745; /* Verde para mensagens de sucesso */
+    --danger-color: #dc3545; /* Vermelho para mensagens de erro/perigo */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 20px;
+    color: #343a40;
+}
+
+h1, h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+}
+
+/* --- Layout Geral e Componentes --- */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    background-color: var(--card-background);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+}
+
+/* --- Formulários e Inputs --- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="date"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura */
+}
+
+button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* --- Tabelas --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--card-background);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: normal;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* --- Links e Ações --- */
+.actions a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.actions a:hover {
+    text-decoration: underline;
+}
+
+.link-voltar {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* --- Mensagens Flash (Alerta) --- */
+ul.flash-messages {
+    list-style: none;
+    padding: 15px;
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #fff3cd; /* Amarelo claro para avisos */
+    border: 1px solid #ffeeba;
+    border-radius: 6px;
+    color: #856404;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* --- Layout da Página de Caixa --- */
+.produto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--card-background);
+    margin-bottom: 10px;
+}
+
+.produto strong {
+    color: #495057;
+}
+
+.produto span {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.estoque-baixo {
+    color: var(--danger-color);
+}
+
+.estoque-ok {
+    color: var(--success-color);
+}
